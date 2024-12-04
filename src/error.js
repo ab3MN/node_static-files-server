@@ -4,7 +4,7 @@ const getError = (requestedPath) => {
   }
 
   if (requestedPath.includes('//')) {
-    return [404, `The musn't contain double slashes`];
+    return [404, `The path must not contain double slashes`];
   }
 
   return null;

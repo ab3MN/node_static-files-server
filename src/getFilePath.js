@@ -2,17 +2,16 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const readFileByPath = async (requestedPath) => {
-  let fileName = requestedPath.replace(/^file\/?/, '');
+  const fileName = requestedPath.replace(/^file\/?/, '') || 'index.html';
 
-  if (!fileName) {
-    fileName = 'index.html';
+  const publicDir = path.resolve(__dirname, '../public');
+  const filePath = path.resolve(publicDir, fileName);
+
+  if (!filePath.startsWith(publicDir)) {
+    throw new Error(
+      'The path must not contain parent directory references (..)',
+    );
   }
-
-  if (fileName.includes('..')) {
-    throw new Error('The path has duplicated slashes');
-  }
-
-  const filePath = path.join(__dirname, `../public/${fileName}`);
 
   try {
     const data = await fs.readFile(filePath, 'utf-8');

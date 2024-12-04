@@ -11,8 +11,8 @@ const createServer = () => {
         req.url || '',
         `http://${req.headers.host}`,
       );
-      const requestedPath = normalizedUrl.pathname.slice(1);
 
+      const requestedPath = normalizedUrl.pathname.slice(1);
       const error = getError(requestedPath);
 
       if (error) {
