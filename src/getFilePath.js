@@ -1,9 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const isFilePathValid = (requestedPath) =>
-  !requestedPath.startsWith('file') || !requestedPath.includes('//');
-
 const readFileByPath = async (requestedPath) => {
   let fileName = requestedPath.replace(/^file\/?/, '');
 
@@ -22,8 +19,8 @@ const readFileByPath = async (requestedPath) => {
 
     return { data };
   } catch {
-    throw new Error('Non-existent file requests');
+    throw new Error('The file does not exist at this path');
   }
 };
 
-module.exports = { readFileByPath, isFilePathValid };
+module.exports = { readFileByPath };
