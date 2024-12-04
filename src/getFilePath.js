@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const isFilePathValid = (requestedPath) =>
-  !requestedPath.startsWith('file/') || !requestedPath.includes('//');
+  !requestedPath.startsWith('file') || !requestedPath.includes('//');
 
 const readFileByPath = async (requestedPath) => {
   let fileName = requestedPath.replace(/^file\/?/, '');
@@ -11,19 +11,18 @@ const readFileByPath = async (requestedPath) => {
     fileName = 'index.html';
   }
 
-  const publicPath = path.resolve(__dirname, '../public');
-  const resolvedPath = path.resolve(publicPath, fileName);
-
-  if (!resolvedPath.startsWith(publicPath)) {
+  if (fileName.includes('..')) {
     throw new Error('The path has duplicated slashes');
   }
 
+  const filePath = path.join(__dirname, `../public/${fileName}`);
+
   try {
-    const data = await fs.readFile(resolvedPath, 'utf-8');
+    const data = await fs.readFile(filePath, 'utf-8');
 
     return { data };
   } catch {
-    throw new Error('The file does not exist at this path.');
+    throw new Error('Non-existent file requests');
   }
 };
 
